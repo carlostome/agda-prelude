@@ -51,3 +51,7 @@ mapM = traverse′
 mapM! : ∀ {a} {F : Set → Set} {A : Set a} {{AppF : Applicative F}} →
           (A → F ⊤) → List A → F ⊤
 mapM! f xs = _ <$ mapM f xs
+
+sequenceA : ∀ {a} {F : Set a → Set a} {A : Set a} {{AppF : Applicative F}} →
+            List (F A) → F (List A)
+sequenceA = traverse id
