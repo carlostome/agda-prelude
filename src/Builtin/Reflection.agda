@@ -1,6 +1,7 @@
 
 module Builtin.Reflection where
 
+
 open import Prelude hiding (abs)
 open import Prelude.Equality.Unsafe
 open import Builtin.Float
@@ -109,6 +110,33 @@ instance
 
   TraversableArg : Traversable Arg
   traverse {{TraversableArg}} f (arg i x) = ⦇ (arg i) (f x) ⦈
+
+instance
+  EqVisibility : Eq Visibility
+  _==_ {{EqVisibility}} visible visible   = yes refl
+  _==_ {{EqVisibility}} visible hidden    = no (λ {()})
+  _==_ {{EqVisibility}} visible instance′ = no (λ {()})
+  _==_ {{EqVisibility}} hidden visible    = no (λ {()})
+  _==_ {{EqVisibility}} hidden hidden     = yes refl
+  _==_ {{EqVisibility}} hidden instance′  = no (λ {()})
+  _==_ {{EqVisibility}} instance′ visible = no (λ {()})
+  _==_ {{EqVisibility}} instance′ hidden  = no (λ {()})
+  _==_ {{EqVisibility}} instance′ instance′ = yes refl
+
+instance
+  EqRelevance : Eq Relevance
+  _==_ {{EqRelevance}} relevant relevant     = yes refl
+  _==_ {{EqRelevance}} relevant irrelevant   = no (λ{()})
+  _==_ {{EqRelevance}} irrelevant relevant   = no (λ{()})
+  _==_ {{EqRelevance}} irrelevant irrelevant = yes refl
+
+instance
+  EqArgInfo : Eq ArgInfo
+  _==_ {{EqArgInfo}} (arg-info v r) (arg-info v₁ r₁)
+    with v == v₁ | r == r₁
+  ... | yes refl | yes refl = yes refl
+  ... | _    | no x  = no (λ {refl → x refl})
+  ... | no x | _     = no (λ {refl → x refl})
 
 unAbs : ∀ {A} → Abs A → A
 unAbs (abs _ x) = x
