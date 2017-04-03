@@ -80,6 +80,12 @@ take zero    _        = []
 take (suc n) []       = []
 take (suc n) (x ∷ xs) = x ∷ take n xs
 
+takeWhile : ∀ {a} {A : Set a} → (A → Bool) → List A → List A
+takeWhile p []       = []
+takeWhile p (x ∷ xs) with p x
+... | false = []
+... | true  = x ∷ takeWhile p xs
+
 drop : ∀ {a} {A : Set a} → Nat → List A → List A
 drop zero    xs       = xs
 drop (suc n) []       = []
